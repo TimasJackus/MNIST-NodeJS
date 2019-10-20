@@ -10,7 +10,6 @@ gulp.task('build', function() {
         .pipe(gulp.dest('dist/'));
 });
 gulp.task('clean', function() {
-    console.log('clean');
     return del(['dist']);
 });
 
