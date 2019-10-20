@@ -1,15 +1,5 @@
 import { Matrix, max, zeros } from 'mathjs';
-
-interface IMaxPoolGenerator {
-    imgRegion: number[][][];
-    i: number;
-    j: number;
-}
-
-interface IMaxPool {
-    forward(input: number[][][]): number[][][];
-    iterateRegions(image: number[][][]): Generator<IMaxPoolGenerator>;
-}
+import { IMaxPool, IMaxPoolGenerator } from './interfaces';
 
 export default class MaxPool implements IMaxPool {
 
