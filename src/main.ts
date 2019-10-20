@@ -4,14 +4,18 @@ import SoftMax from './softMax';
 import { trainingData } from './data';
 import { log, divide,subtract, zeros, Matrix } from 'mathjs';
 
-const { images, labels } = trainingData(10);
+const printInterval = 1000;
+const imagesCount = 15000;
+const epochCount = 3;
+const trainingImages = trainingData(imagesCount, 'training');
+const testImages = trainingData(imagesCount, 'test');
 const softMax = new SoftMax(13 * 13 * 8, 10);
+const conv = new Conv2D(8);
+const maxPool = new MaxPool();
 
 const forward = (image: number[][], label: number): any => {
-    const conv = new Conv2D(8);
-    const maxPool = new MaxPool();
     image = subtract(divide(image, 255), 0.5) as number[][];
-    let output: number[][][] | number[] = conv.forward(image);
+    let output: number[][][] | number[][] | number[] = conv.forward(image);
     output = maxPool.forward(output);
     output = softMax.forward(output);
     
@@ -25,28 +29,57 @@ const forward = (image: number[][], label: number): any => {
 const train = (image: number[][], label: number, learningRate: number = 0.005) => {
     const { output, loss, acc } = forward(image, label);
 
-    let gradient = (zeros(10) as Matrix).toArray() as number[];
+    let gradient: any = (zeros(10) as Matrix).toArray() as number[];
     gradient[label] = -1 / output[label];
 
     gradient = softMax.backprop(gradient, learningRate) as any;
+    // console.log(gradient);
+    gradient = maxPool.backprop(gradient) as any;
+    conv.backprop(gradient, learningRate);
 
     return { loss, acc };
 };
 
+const shuffle = (a: any) => {
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+}
+
 let totalLoss = 0;
 let correctDigits = 0;
-images.map((image, index) => {
-    const { loss, acc } = train(image, labels[index], 0.05);
+
+for (let i = 0; i < epochCount; i++) {
+    shuffle(trainingImages);
+    trainingImages.map((data, index) => {
+        const { image, label } = data;
+        const { loss, acc } = train(image, label);
+    
+        totalLoss += loss;
+        correctDigits += acc;
+    
+        if (index % printInterval === printInterval - 1) {
+            console.log(`[Step ${index + 1}] Past ${printInterval} steps: 
+                        Average Loss ${totalLoss / printInterval} | 
+                        Accuracy: ${correctDigits / printInterval * 100}%`);
+            totalLoss = 0
+            correctDigits = 0;
+        }
+    });
+}
+
+
+totalLoss = 0;
+correctDigits = 0;
+testImages.map(data => {
+    const { image, label } = data;
+    const { loss, acc } = forward(image, label);
 
     totalLoss += loss;
     correctDigits += acc;
-
-    const printInterval = 10;
-    if (index % printInterval === printInterval - 1) {
-        console.log(`[Step ${index + 1}] Past ${printInterval} steps: 
-                    Average Loss ${totalLoss / printInterval} | 
-                    Accuracy: ${correctDigits / printInterval * 100}%`);
-        totalLoss = 0
-        correctDigits = 0;
-    }
 });
+
+console.log(`Test loss: ${totalLoss / testImages.length}`);
+console.log(`Test accuracy: ${correctDigits / testImages.length * 100}%`);

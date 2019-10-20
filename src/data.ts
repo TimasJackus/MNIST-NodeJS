@@ -1,15 +1,27 @@
 import * as fs from 'fs';
 
-interface ITrainingData {
-    images: number[][][];
-    labels: number[];
-};
+interface IImage {
+    label: number;
+    image: number[][];
+}
 
-export const trainingData = (amount: number): ITrainingData => {
-    const dataFileBuffer  = fs.readFileSync(__dirname + '/../data/train-images-idx3-ubyte');
-    const labelFileBuffer  = fs.readFileSync(__dirname + '/../data/train-labels-idx1-ubyte');
-    const images: number[][][] = [];
-    const labels: number[] = [];
+type IDataType = 'training' | 'test';
+
+export const trainingData = (amount: number, dataType: IDataType): IImage[] => {
+    let dataFileBuffer;
+    let labelFileBuffer;
+
+    if (dataType === 'training') {
+        if (amount > 60000) amount = 60000;
+        dataFileBuffer = fs.readFileSync(__dirname + '/../data/train-images-idx3-ubyte');
+        labelFileBuffer  = fs.readFileSync(__dirname + '/../data/train-labels-idx1-ubyte');
+    } else {
+        if (amount > 10000) amount = 10000;
+        dataFileBuffer = fs.readFileSync(__dirname + '/../data/t10k-images-idx3-ubyte');
+        labelFileBuffer  = fs.readFileSync(__dirname + '/../data/t10k-labels-idx1-ubyte');
+    }
+
+    const images: IImage[] = [];
     
     for (let image = 0; image < amount; image++) { 
         var imagePixels = [];
@@ -22,9 +34,11 @@ export const trainingData = (amount: number): ITrainingData => {
             imagePixels.push(row);
         }
     
-        images.push(imagePixels);
-        labels.push(labelFileBuffer[image + 8]);
+        images.push({
+            image: imagePixels,
+            label: labelFileBuffer[image + 8]
+        });
     }
 
-    return { images, labels };
+    return images;
 };
