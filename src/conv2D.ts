@@ -82,9 +82,9 @@ export default class Conv2D {
         }); 
     }
 
-    readFromFile() {
+    readFromFile(folder: string = 'trained') {
         return new Promise((resolve, reject) => {
-            fs.readFile('./trained/filters', 'utf8', (err, data) => {
+            fs.readFile('./' + folder + '/filters', 'utf8', (err, data) => {
                 if (err) throw err;
                 this.filters = JSON.parse(data);
                 resolve(true);

@@ -98,9 +98,9 @@ export default class CNN {
         console.log(`Test loss: ${totalLoss / this.testImages.length} \nTest accuracy: ${correctDigits / this.testImages.length * 100}%`);
     }
 
-    async predictAsync(image: number[][]): Promise<string> {
-        await this.conv.readFromFile();
-        await this.softMax.readFromFile();
+    async predictAsync(image: number[][], folder: string = 'trained'): Promise<string> {
+        await this.conv.readFromFile(folder);
+        await this.softMax.readFromFile(folder);
 
         return new Promise(resolve => {
             resolve(this.predict(image).predicted)

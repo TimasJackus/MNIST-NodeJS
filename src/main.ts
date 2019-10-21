@@ -25,7 +25,7 @@ app.get('/test', (req: any, res: any, next) => {
 app.post('/predict', async (req: any, res: any, next) => {
     try {
         const cnn = new CNN();
-        const predictedNumber = await cnn.predictAsync(req.body.image);
+        const predictedNumber = await cnn.predictAsync(req.body.image, 'trainedFrontend');
         res.json(predictedNumber);
     } catch(e) {
         next(e);

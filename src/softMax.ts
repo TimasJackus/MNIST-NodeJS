@@ -75,9 +75,9 @@ export default class SoftMax {
         });
     }
 
-    readWeights() {
+    readWeights(folder: string) {
         return new Promise((resolve, reject) => {
-            fs.readFile('./trained/weights', 'utf8', (err, data) => {
+            fs.readFile('./' + folder + '/weights', 'utf8', (err, data) => {
                 if (err) throw err;
                 this.weights = JSON.parse(data);
                 resolve(true);
@@ -85,9 +85,9 @@ export default class SoftMax {
         });
     }
 
-    readBiases() {
+    readBiases(folder: string) {
         return new Promise((resolve, reject) => {
-            fs.readFile('./trained/biases', 'utf8', (err, data) => {
+            fs.readFile('./' + folder + '/biases', 'utf8', (err, data) => {
                 if (err) throw err;
                 this.biases = JSON.parse(data);
                 resolve(true);
@@ -95,7 +95,7 @@ export default class SoftMax {
         });
     }
 
-    readFromFile() {
-        return Promise.all([this.readBiases(), this.readWeights()]);
+    readFromFile(folder: string = 'trained') {
+        return Promise.all([this.readBiases(folder), this.readWeights(folder)]);
     }
 }
