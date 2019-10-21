@@ -6,13 +6,15 @@ export default class SoftMax {
     weights: any;
     inputLength: number;
     outputLength: number;
+    filterNum: number;
     // Cached props
     _inputShape: number[];
     _outputLength: number;
     _input: number[];
     _totals: number[];
 
-    constructor(inputLength: number, outputLength: number) {
+    constructor(inputLength: number, outputLength: number, filterNum: number) {
+        this.filterNum = filterNum;
         this.weights = <MathArray>divide(random([inputLength, outputLength]), inputLength);
         this.biases = <number[]>(<Matrix>zeros(outputLength)).toArray();
         this.inputLength = inputLength;
@@ -62,7 +64,7 @@ export default class SoftMax {
             this.weights = subtract(this.weights, multiply(learningRate, d_L_d_w));
             this.biases = subtract(this.biases, multiply(learningRate, d_L_d_b)) as number[];
 
-            return reshape(d_L_d_inputs, [13, 13, 8]) as Matrix;
+            return reshape(d_L_d_inputs, [13, 13, this.filterNum]) as Matrix;
         }
     }
 

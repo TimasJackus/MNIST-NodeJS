@@ -5,13 +5,14 @@ import { trainingData } from './data';
 import { log, divide,subtract, zeros, Matrix } from 'mathjs';
 
 export default class CNN {
-    printInterval = 10;
-    imagesCount = 100;
-    epochCount = 5;
+    printInterval = 500;
+    imagesCount = 1000;
+    epochCount = 3;
     trainingImages = trainingData(this.imagesCount, 'training');
     testImages = trainingData(this.imagesCount, 'test');
-    softMax = new SoftMax(13 * 13 * 8, 10);
-    conv = new Conv2D(8);
+    filtersCount = 8;
+    softMax = new SoftMax(13 * 13 * this.filtersCount, 10, this.filtersCount);
+    conv = new Conv2D(this.filtersCount);
     maxPool = new MaxPool();
 
     constructor() { }
@@ -76,9 +77,10 @@ export default class CNN {
                 }
             });
         }
-
         this.conv.saveToFile();
         this.softMax.saveToFile();
+        console.log('Saving trained model...');
+        console.log('Model was successfuly saved.');
     }
 
     async test() {
