@@ -1,4 +1,5 @@
 import { MathArray, divide, random, zeros, flatten, Matrix, multiply, exp, sum, transpose, subtract, reshape, add } from "mathjs";
+import * as fs from 'fs';
 
 export default class SoftMax {
     biases: number[];
@@ -63,5 +64,38 @@ export default class SoftMax {
 
             return reshape(d_L_d_inputs, [13, 13, 8]) as Matrix;
         }
+    }
+
+    saveToFile() {
+        fs.writeFile("./trained/weights", JSON.stringify(this.weights), (err) => {
+            if (err) throw err;
+        });
+        fs.writeFile("./trained/biases", JSON.stringify(this.biases), (err) => {
+            if (err) throw err;
+        });
+    }
+
+    readWeights() {
+        return new Promise((resolve, reject) => {
+            fs.readFile('./trained/weights', 'utf8', (err, data) => {
+                if (err) throw err;
+                this.weights = JSON.parse(data);
+                resolve(true);
+            });
+        });
+    }
+
+    readBiases() {
+        return new Promise((resolve, reject) => {
+            fs.readFile('./trained/biases', 'utf8', (err, data) => {
+                if (err) throw err;
+                this.biases = JSON.parse(data);
+                resolve(true);
+            });
+        });
+    }
+
+    readFromFile() {
+        return Promise.all([this.readBiases(), this.readWeights()]);
     }
 }

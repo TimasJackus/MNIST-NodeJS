@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Digit recognition</title>
+        <!-- green #5dc18d -->
+        <style>
+            body {
+                margin: 50px;
+                font-family: Arial, Helvetica, sans-serif;
+            }
+            canvas {
+                border: 1px solid #ddd;
+                float: left;
+            }
+            #resized-canvas {
+                display: none;
+            }
+            #result {
+                font-size: 72px;
+                color: #5dc18d;
+                margin-left: 100px;
+                margin-top: 80px;
+                float: left;
+            }
+            .clearfix::after {
+                content: "";
+                clear: both;
+                display: table;
+            }
+            button {
+                background: #5dc18d;
+                border: none;
+                border-radius: 20px;
+                font-size: 16px;
+                padding: 10px  30px;
+                margin-top: 30px;
+                color: white;
+            }
+        </style>
+    </head>
+    <body>
+        <canvas id="drawing-canvas" width="280" height="280"></canvas>
+        <div id="result"></div>
+        <div class="clearfix"></div>
+        <button onclick="predict()">Predict</button>
+        <button onclick="reset()">Clear</button>
+        <canvas id="resized-canvas" width="28" height="28"></canvas>
+        <script src="./jsketch/sketchable.full.min.js"></script>
+        <script src="./index.js"></script>
+    </body>
+</html>
