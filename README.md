@@ -32,3 +32,9 @@ Run:
 ```
 yarn start
 ```
+
+For training visit `http://localhost:3000/train`
+
+For testing visit `http://localhost:3000/test`
+
+For predicing drawed image: `http://localhost:3000`
