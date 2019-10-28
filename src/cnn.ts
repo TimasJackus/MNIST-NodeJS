@@ -1,16 +1,16 @@
-import Conv2D from './conv2D';
+import Conv2D from './conv2d';
 import MaxPool from './maxPool';
 import SoftMax from './softMax';
 import { trainingData } from './data';
 import { log, divide,subtract, zeros, Matrix } from 'mathjs';
 
 export default class CNN {
-    printInterval = 500;
-    imagesCount = 1000;
-    epochCount = 3;
+    printInterval = 0;
+    imagesCount = 100;
+    epochCount = 5;
     trainingImages = trainingData(this.imagesCount, 'training');
     testImages = trainingData(this.imagesCount, 'test');
-    filtersCount = 8;
+    filtersCount = 12;
     softMax = new SoftMax(13 * 13 * this.filtersCount, 10, this.filtersCount);
     conv = new Conv2D(this.filtersCount);
     maxPool = new MaxPool();
@@ -21,7 +21,6 @@ export default class CNN {
         const { output } = this.predict(image);
         const loss = -log(output[label])
         const acc = output.indexOf(Math.max(...output)) === label ? 1 : 0;
-
         return { output, loss, acc };
     };
 
@@ -63,7 +62,7 @@ export default class CNN {
             this.shuffle(this.trainingImages);
             this.trainingImages.map((data, index) => {
                 const { image, label } = data;
-                const { loss, acc } = this.train(image, label);
+                const { loss, acc } = this.train(image, label, 0.01);
             
                 totalLoss += loss;
                 correctDigits += acc;

@@ -1,7 +1,7 @@
 const config = {
     graphics: {
         firstPointSize: 3,
-        lineWidth: 14,
+        lineWidth: 17,
         strokeStyle: '#000',
         fillStyle: '#000',
         lineCap: 'round',
