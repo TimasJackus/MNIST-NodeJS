@@ -14,7 +14,7 @@
     "global": "^4.4.0",
     "gulp": "4.0.0",
     "gulp-typescript": "^5.0.1",
-    "mathjs": "^6.2.3",
+    "mathjs": "^7.5.1",
     "nodemon": "^1.19.3",
     "typescript": "^3.6.4"
   },
