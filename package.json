@@ -9,7 +9,7 @@
     "body-parser": "^1.19.0",
     "del": "^5.1.0",
     "esm": "^3.2.25",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "fs": "^0.0.1-security",
     "global": "^4.4.0",
     "gulp": "4.0.0",
